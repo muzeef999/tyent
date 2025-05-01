@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *)); 
+
+
+@theme {
+    --color-background: #f4f6fa;
+    --color-card: #ffffff;
+    --color-primary: #008ac7;
+    --color-secondary: #00b4d8;
+    --color-input: #e0f7fa;
+
+    /* Dark mode variables (stored, not active yet) */
+    --color-dark-background: #1a1a1a;
+    --color-dark-card: #2c2c2c;
+    --color-dark-primary: #005f8b;
+    --color-dark-secondary: #0091c6;
+    --color-dark-input: #004d6a;
+}
+
+/* Light mode (default) */
+:root {
+  --background: var(--color-background);
+  --card: var(--color-card);
+  --primary: var(--color-primary);
+  --secondary: var(--color-secondary);
+  --input: var(--color-input);
+}
+
+/* Dark mode override */
+.dark {
+  --background: var(--color-dark-background);
+  --card: var(--color-dark-card);
+  --primary: var(--color-dark-primary);
+  --secondary: var(--color-dark-secondary);
+  --input: var(--color-dark-input);
+}
+
+
+@layer components {
+   .card {
+     @apply m-2 p-2 rounded-lg bg-card shadow
+   }
+}

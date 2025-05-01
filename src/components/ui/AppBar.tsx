@@ -19,8 +19,8 @@ const AppBar = () => {
   }, []);
 
   return (
-    <div className={`fixed w-full top-0 z-50 ${scrolling ? 'bg-primary dark:bg-darkPrimary shadow-lg' : 'bg-transparent'}`}>
-      <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
+    <div className={`fixed w-full top-0 z-50 bg-primary`}>
+      <div className="flex justify-between items-center p-2 max-w-7xl mx-auto">
         <div className="text-white font-semibold text-xl">Dashboard</div>
         <div className="flex items-center space-x-6">
           <ThemeToggle />

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/styles/globals.css";
 import Sidebar from "@/components/ui/Sidebar";
 import AppBar from "@/components/ui/AppBar";
 
@@ -27,23 +27,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen  bg-background `}
       >
-       <div className="flex">
-      {/* Sidebar */}
-      <Sidebar />
-      
-      {/* Main Content Area */}
-      <div className="flex-1 ml-64 lg:ml-0">
-        {/* AppBar */}
-        <AppBar />
+        {/* Main Content Area */}
+          <AppBar />
         
-        {/* Main content */}
-        <div className="p-6">
-          {children} {/* This is where page content will be injected */}
-        </div>
-      </div>
-    </div>
+          <div className="flex">
+            <div className="fixed top-14 left-0 w-64 h-[calc(100vh-3.5rem)] bg-white dark:bg-neutral-900 z-20">
+              <Sidebar />
+            </div>
+
+            <div className="flex-1 ml-64 mt-14 p-6">
+              {children} 
+            </div>
+          </div>
       </body>
     </html>
   );
