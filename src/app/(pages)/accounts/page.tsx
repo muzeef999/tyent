@@ -1,9 +1,8 @@
-import CustomerForm from '@/components/CustomerForm'
 import React from 'react'
 
 const page = () => {
   return (
-    <div><CustomerForm /></div>
+    <div>page</div>
   )
 }
 

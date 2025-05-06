@@ -27,13 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen  bg-background `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen  bg-background text-foreground`}
       >
         {/* Main Content Area */}
           <AppBar />
         
           <div className="flex">
-            <div className="fixed top-14 left-0 w-64 h-[calc(100vh-3.5rem)] bg-white dark:bg-neutral-900 z-20">
+            <div className="fixed top-14 left-0 w-64 h-[calc(100vh-3.5rem)] z-20">
               <Sidebar />
             </div>
 

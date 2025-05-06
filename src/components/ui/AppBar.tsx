@@ -19,7 +19,7 @@ const AppBar = () => {
   }, []);
 
   return (
-    <div className={`fixed w-full top-0 z-50 bg-primary`}>
+    <div className={`fixed w-full top-0 z-50 bg-primary transition-shadow ${scrolling ? 'shadow-md' : ''}`}>
       <div className="flex justify-between items-center p-2 max-w-7xl mx-auto">
         <div className="text-white font-semibold text-xl">Dashboard</div>
         <div className="flex items-center space-x-6">

@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const newCustomer = await Customer.create(validated);
     return NextResponse.json(newCustomer, { status: 201 });
-  } catch (error) {
+  } catch (error: unknown) {
     return handleError(error);
   }
 }
@@ -22,17 +22,34 @@ export async function GET() {
     await dbConnect();
     const customers = await Customer.find().sort({ createdAt: -1 });
     return NextResponse.json(customers);
-  } catch (error) {
+  } catch (error: unknown) {
     return handleError(error);
   }
 }
 
+type ZodErrorWithIssues = Error & {
+  issues?: unknown;
+};
+
 function handleError(error: unknown) {
-  if (error instanceof Error && 'issues' in error) {
-    return NextResponse.json({ error: 'Validation failed', details: (error as any).issues }, { status: 400 });
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'issues' in error
+  ) {
+    const zodError = error as ZodErrorWithIssues;
+    return NextResponse.json(
+      {
+        error: 'Validation failed',
+        details: zodError.issues,
+      },
+      { status: 400 }
+    );
   }
+
   if (error instanceof Error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
   return NextResponse.json({ error: 'Unknown error occurred' }, { status: 500 });
 }

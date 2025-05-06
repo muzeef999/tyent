@@ -1,44 +1,78 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *)); 
-
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-background: #f4f6fa;
-    --color-card: #ffffff;
-    --color-primary: #008ac7;
-    --color-secondary: #00b4d8;
-    --color-input: #e0f7fa;
+  --color-background: #f4f6fa;
+  --color-card: #ffffff;
+  --color-primary: #008ac7;
+  --color-secondary: #00b4d8;
+  --color-input: #e0f7fa;
+  --text-color: #1f2937;
+  --secondary-text-color: #4b5563;
+  --placeholder-color: #6b7280;
+  --color-hover:#e8e8e8;
+  
 
-    /* Dark mode variables (stored, not active yet) */
-    --color-dark-background: #1a1a1a;
-    --color-dark-card: #2c2c2c;
-    --color-dark-primary: #005f8b;
-    --color-dark-secondary: #0091c6;
-    --color-dark-input: #004d6a;
+  /* Dark mode variables */
+  --color-dark-hover:#2a2a2a;
+  --color-dark-background: #1a1a1a;
+  --color-dark-card: #2c2c2c;
+  --color-dark-primary: #005f8b;
+  --color-dark-secondary: #0091c6;
+  --color-dark-input: #004d6a;
+  --text-dark-color: #f5f5f5;
+  --secondary-text-dark-color: #9ca3af;
+  --placeholder-dark-color: #6b7280;
 }
 
-/* Light mode (default) */
+/* Light mode */
 :root {
+  --hover:var(--color-hover);
   --background: var(--color-background);
   --card: var(--color-card);
   --primary: var(--color-primary);
   --secondary: var(--color-secondary);
   --input: var(--color-input);
+  --text: var(--text-color);
+  --text-secondary: var(--secondary-text-color);
+  --text-placeholder: var(--placeholder-color);
 }
 
 /* Dark mode override */
 .dark {
+  --hover:var(--color-dark-hover);
   --background: var(--color-dark-background);
   --card: var(--color-dark-card);
   --primary: var(--color-dark-primary);
   --secondary: var(--color-dark-secondary);
   --input: var(--color-dark-input);
+  --text: var(--text-dark-color);
+  --text-secondary: var(--secondary-text-dark-color);
+  --text-placeholder: var(--placeholder-dark-color);
 }
 
-
-@layer components {
-   .card {
-     @apply m-2 p-2 rounded-lg bg-card shadow
-   }
+@layer utilities {
+  .bg-background {
+    background-color: var(--background);
+  }
+  .bg-card {
+    background-color: var(--card);
+    @apply  p-2 rounded-lg overflow-hidden shadow-md 
+  }
+  .hover-bg {
+    transition: background-color 0.3s;
+  }
+  .hover-bg:hover {
+    background-color: var(--hover);
+  }
+  .text-foreground {
+    color: var(--text);
+  }
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+  .placeholder-color::placeholder {
+    color: var(--text-placeholder);
+  }
 }
