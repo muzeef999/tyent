@@ -1,55 +1,36 @@
 import dbConnect from '@/lib/mongodb';
 import Customer from '@/models/Customer';
-import { CustomerSchema } from '@/zod/customer';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+// export const POST =  async(req: Request) => {
+//   try {
+//     await dbConnect();
+//     const body = await req.json();
+
+//     const validated = CustomerSchema.parse(body);
+
+//     const newCustomer = await Customer.create(validated);
+//     return NextResponse.json(newCustomer, { status: 201 });
+//   } catch (error: unknown) {
+//     return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error occurred' }, { status: 500 });
+//   }
+// }
+
+export const GET = async(req:NextRequest)  => {
+  
+  const url = new URL(req.url);
+  const page = parseInt(url.searchParams.get("page") || "1");
+  const limit = parseInt(url.searchParams.get("limit") || "10");
+
   try {
+
     await dbConnect();
-    const body = await req.json();
+    const customers = await Customer.find().skip((page -1) * limit).limit(limit).lean();
 
-    const validated = CustomerSchema.parse(body);
-
-    const newCustomer = await Customer.create(validated);
-    return NextResponse.json(newCustomer, { status: 201 });
+    const total = await Customer.countDocuments();
+    return NextResponse.json({customers, total});
   } catch (error: unknown) {
-    return handleError(error);
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error occurred' }, { status: 500 });
   }
 }
 
-export async function GET() {
-  try {
-    await dbConnect();
-    const customers = await Customer.find().sort({ createdAt: -1 });
-    return NextResponse.json(customers);
-  } catch (error: unknown) {
-    return handleError(error);
-  }
-}
-
-type ZodErrorWithIssues = Error & {
-  issues?: unknown;
-};
-
-function handleError(error: unknown) {
-  if (
-    typeof error === 'object' &&
-    error !== null &&
-    'issues' in error
-  ) {
-    const zodError = error as ZodErrorWithIssues;
-    return NextResponse.json(
-      {
-        error: 'Validation failed',
-        details: zodError.issues,
-      },
-      { status: 400 }
-    );
-  }
-
-  if (error instanceof Error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json({ error: 'Unknown error occurred' }, { status: 500 });
-}
