@@ -13,3 +13,12 @@ export  interface Customers {
   serviceHistory: string[]; // Array of service dates
   upcomingServices: string[]; // Array of upcoming service dates
 }
+
+
+export  interface service {
+  customerId: string;
+  type: String;
+  date: String;
+  status: String;
+  remarks: String;
+}

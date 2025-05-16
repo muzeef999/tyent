@@ -1,63 +1,71 @@
+// src/components/CustomerList.tsx
 "use client";
-import { Customers } from "@/types/index";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { FaEnvelope, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
-import {
-  MdOutlineKeyboardArrowRight,
-  MdOutlineKeyboardArrowLeft,
-} from "react-icons/md";
+import { useQuery, gql } from "@apollo/client";
+import client from "@/lib/apollo-client";
+import { Customers } from "@/types";
+import {  FaPhoneAlt, } from "react-icons/fa";
+import gmail from "@/asserts/gmail.png"
+import whatsapp from "@/asserts/whatsapp.png"
+import Image from "next/image";
 
-const page = () => {
-  const [customers, setCustomers] = useState<Customers[] | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const rowsPerPage = 15;
 
-  useEffect(() => {
-    fetchCustomers(currentPage);
-  }, [currentPage]);
-
-  const fetchCustomers = async (page: number) => {
-    try {
-      const response = await axios.get(
-        `/api/customers?page=${page}&limit=${rowsPerPage}`
-      );
-      setCustomers(response.data.customers);
-      setTotalPages(Math.ceil(response.data.total / rowsPerPage));
-    } catch (error) {
-      console.error("Failed to fetch customers:", error);
+const GET_CUSTOMERS = gql`
+  query GetCustomers  {
+    getCustomers  {
+      id
+      name
+      contactNumber
+      email
+      address
+      installedModel
+      price
+      invoiceNumber
+      serialNumber
+      warranty
+      amcRenewed
+      serviceHistory {
+        type
+        date
+        status
+        remarks
+      }
+      upcomingServices {
+        type
+        date
+        status
+        remarks
+      }
+      createdAt
+      updatedAt
     }
-  };
+  }
+`;
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+export default function CustomerList() {
+  const { loading, error, data } = useQuery(GET_CUSTOMERS, { client });
+
+  console.log(data);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
-      <h1>Custmores</h1>
-      <div className="card">
-        <table className="table-custom min-w-full rounded-lg shadow-lg overflow-hidden">
+     <table className="table-custom min-w-full rounded-lg shadow-lg overflow-hidden">
           <thead>
             <tr className="bg-card">
               <th>Name</th>
-              <th>Number</th>
-              <th>Email</th>
+              <th>contact</th>
               <th>Installed Model</th>
               <th>Invoice Number</th>
               <th>Serial Number</th>
               <th>Warranty</th>
               <th>AMC Renewed</th>
-              <th>Service History</th>
-              <th>Upcoming Services</th>
             </tr>
           </thead>
           <tbody>
-            {customers?.map((item, i) => (
-              <tr key={i} className="border-b-1 border-gray-300 ">
+            {data?.getCustomers?.map((item: Customers, ) => (
+              <tr key={item.id} className="border-b-1 border-gray-300 ">
                 <td>{item.name}</td>
                 <td className="flex items-center justify-center">
                   {item.contactNumber && (
@@ -74,66 +82,104 @@ const page = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <FaWhatsapp style={{ color: "green" }} />
+                         <Image src={whatsapp} alt="whatsapp" width={20} height={20} />
+                   
+                      </a>
+                      <a href={`${item.email}`} target="_blank"
+                        rel="noopener noreferrer">
+                      <Image src={gmail} alt="gmail" width={20} height={20} />
+                   
                       </a>
                     </>
                   )}
                 </td>
-                <td>
-                  {item.email && (
-                    <>
-                      <FaEnvelope
-                        style={{ marginRight: "8px", color: "blue" }}
-                      />
-                    </>
-                  )}
-                </td>
+                
                 <td>{item.installedModel}</td>
                 <td>{item.invoiceNumber}</td>
                 <td>{item.serialNumber}</td>
                 <td>{item.warranty}</td>
                 <td>{item.amcRenewed}</td>
-                <td>{item.serviceHistory.join(", ")}</td>
-                <td>{item.upcomingServices.join(", ")}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={9} className="flex justify-between items-center mt-4 w-full">
-                <button
-                  className={`px-3 py-1 bg-card rounded ${
-                    currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  onClick={() =>
-                    currentPage > 1 && handlePageChange(currentPage - 1)
-                  }
-                >
-                  <MdOutlineKeyboardArrowLeft />
-                </button>
-                <span className="mx-2">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  className={`px-3 py-1 bg-card rounded ${
-                    currentPage === totalPages
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                  onClick={() =>
-                    currentPage < totalPages &&
-                    handlePageChange(currentPage + 1)
-                  }
-                >
-                  <MdOutlineKeyboardArrowRight />
-                </button>
-              </td>
+              {/* <td colSpan={10}>
+                <div className="flex justify-between items-center mt-4 w-full">
+                  <div>Total : {totalCustomers}</div>
+                  <div className="flex gap-2 items-center mb-4">
+                    <label>Rows per page:</label>
+                    <select
+                      value={rowsPerPage}
+                      onChange={(e) => setRowsPerPage(Number(e.target.value))}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={15}>15</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                      <option value={40}>40</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                    </select>
+                  </div>
+
+                  <div className="flex">
+                    <button
+                      className={`px-3 py-1 bg-card rounded ${
+                        currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                      onClick={() =>
+                        currentPage > 1 && handlePageChange(currentPage - 1)
+                      }
+                    >
+                      <MdOutlineKeyboardArrowLeft />
+                    </button>
+                    <div className="flex gap-2">
+                      {Array.from(
+                        {
+                          length: Math.min(
+                            10,
+                            totalPages - Math.floor((currentPage - 1) / 10) * 10
+                          ),
+                        },
+                        (_, index) => {
+                          const page =
+                            Math.floor((currentPage - 1) / 10) * 10 + index + 1;
+                          return (
+                            <button
+                              key={page}
+                              className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                                page === currentPage && "bg-primary"
+                              }`}
+                              onClick={() => handlePageChange(page)}
+                            >
+                              {page}
+                            </button>
+                          );
+                        }
+                      )}
+                    </div>
+                    <button
+                      className={`px-3 py-1 bg-card rounded ${
+                        currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        currentPage < totalPages &&
+                        handlePageChange(currentPage + 1)
+                      }
+                    >
+                      <MdOutlineKeyboardArrowRight />
+                    </button>
+                  </div>
+                </div>
+              </td> */}
             </tr>
           </tfoot>
         </table>
-      </div>
+      
     </div>
   );
-};
-
-export default page;
+}
