@@ -7,11 +7,12 @@ import {  FaPhoneAlt, } from "react-icons/fa";
 import gmail from "@/asserts/gmail.png"
 import whatsapp from "@/asserts/whatsapp.png"
 import Image from "next/image";
+import Link from "next/link";
 
 
 const GET_CUSTOMERS = gql`
-  query GetCustomers  {
-    getCustomers  {
+  query GetCustomers   {
+    getCustomers   {
       id
       name
       contactNumber
@@ -23,20 +24,6 @@ const GET_CUSTOMERS = gql`
       serialNumber
       warranty
       amcRenewed
-      serviceHistory {
-        type
-        date
-        status
-        remarks
-      }
-      upcomingServices {
-        type
-        date
-        status
-        remarks
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -51,6 +38,7 @@ export default function CustomerList() {
 
   return (
     <div>
+      <Link href={"/customers/new"}>Add New Customer</Link>
      <table className="table-custom min-w-full rounded-lg shadow-lg overflow-hidden">
           <thead>
             <tr className="bg-card">

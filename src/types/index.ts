@@ -1,9 +1,10 @@
 export  interface Customers {
-    id:string;
+  id: string;
   name: string;
   contactNumber: string;
   email: string;
   address: string;
+  remarks:string;
   installedModel: string;
   price: number;
   invoiceNumber: string;
@@ -17,8 +18,8 @@ export  interface Customers {
 
 export  interface service {
   customerId: string;
-  type: String;
-  date: String;
-  status: String;
-  remarks: String;
+  type: string;
+  date: string;
+  status: string;
+  remarks: string;
 }
