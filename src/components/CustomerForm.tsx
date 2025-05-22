@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import Input from './ui/Input';
 import Button from './ui/Button';
+import Input from './ui/Input';
 
 type CustomerFormData = {
   name: string;
@@ -61,14 +61,14 @@ export default function CustomerForm({ onSubmit, initialData = {} }: CustomerFor
     >
       <h2 className="text-2xl font-semibold text-gray-700">Customer Details</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Input name="name" label="Customer Name" value={form.name} onChange={handleChange} required />
-        <Input name="contactNumber" label="Contact Number" value={form.contactNumber} onChange={handleChange} required />
-        <Input name="email" label="Email" value={form.email} onChange={handleChange} />
-        <Input name="address" label="Address" value={form.address} onChange={handleChange} />
-        <Input name="installedModel" label="Model" value={form.installedModel} onChange={handleChange} />
+        <Input name="name" label="Customer Name" value={form.name} onChange={handleChange} required type="text" />
+        <Input name="contactNumber" label="Contact Number" value={form.contactNumber} onChange={handleChange} required type="text" />
+        <Input name="email" label="Email" value={form.email} onChange={handleChange} type="email" />
+        <Input name="address" label="Address" value={form.address} onChange={handleChange} type="text" />
+        <Input name="installedModel" label="Model" value={form.installedModel} onChange={handleChange} type="text" />
         <Input name="price" label="Price" value={form.price.toString()} onChange={handleChange} type="number" />
-        <Input name="invoiceNumber" label="Invoice #" value={form.invoiceNumber} onChange={handleChange} />
-        <Input name="serialNumber" label="Serial #" value={form.serialNumber} onChange={handleChange} />
+        <Input name="invoiceNumber" label="Invoice #" value={form.invoiceNumber} onChange={handleChange} type="text" />
+        <Input name="serialNumber" label="Serial #" value={form.serialNumber} onChange={handleChange} type="text" />
         <Select name="warranty" label="Warranty" value={form.warranty} onChange={handleChange} options={[1, 2, 3, 4, 5]} />
         <Select name="amcRenewed" label="AMC Renewed" value={form.amcRenewed} onChange={handleChange} options={[1, 2, 3, 4, 5]} />
       </div>

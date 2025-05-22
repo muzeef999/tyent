@@ -40,7 +40,7 @@ const CREATE_CUSTOMER = gql`
   }
 `;
 
-const page = () => {
+const Page = () => {
   const [form, setForm] = useState<Customers>({
     id: "",
     name: "",
@@ -288,4 +288,4 @@ const page = () => {
 }
 
 
-export default page;
+export default Page;
